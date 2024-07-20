@@ -91,24 +91,25 @@ class HostetskiGPTController extends Controller
 
         $gptThread = $client->threads()->create([]);
         
-        $client->threads()->messages()->create($gptThread->id, [
-            'role' => 'user',
-            'content' => $request->get('query'),
-        ]);
+        // $client->threads()->messages()->create($gptThread->id, [
+        //     'role' => 'user',
+        //     'content' => $request->get('query'),
+        // ]);
 
-        $client->threads()->runs()->create(
-            threadId: $gptThread->id, 
-            parameters: [
-                'assistant_id' => 'asst_1SBgvdStUpzj9GobOmeRkixd',
-            ],
-        );
+        // $client->threads()->runs()->create(
+        //     threadId: $gptThread->id, 
+        //     parameters: [
+        //         'assistant_id' => 'asst_1SBgvdStUpzj9GobOmeRkixd',
+        //     ],
+        // );
 
-        $gptMessages = $client->threads()->messages()->list($gptThread->id, [
-            'limit' => 1,
-        ]);
+        // $gptMessages = $client->threads()->messages()->list($gptThread->id, [
+        //     'limit' => 1,
+        // ]);
 
-        $gptMessage = $gptMessages->data[0];
-        $gptAnswer = $gptMessage->content->text->value;
+        // $gptMessage = $gptMessages->data[0];
+        // $gptAnswer = $gptMessage->content->text->value;
+        $gptAnswer = json_encode($gptThread, JSON_UNESCAPED_UNICODE);
         
         $thread = Thread::find($request->get('thread_id'));
         $answers = [];
