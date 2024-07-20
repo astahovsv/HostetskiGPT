@@ -63,9 +63,9 @@
 
                 <div class="col-sm-6">
                     <select id="model" class="form-control input-sized" name="model" required>
-                        <option value="gpt-3.5-turbo" {!! $settings['model'] == "gpt-3.5-turbo" ? "selected" : "" !!}>gpt-3.5-turbo</option>
-                        <option value="gpt-3.5-turbo-16k" {!! $settings['model'] == "gpt-3.5-turbo-16k" ? "selected" : "" !!}>gpt-3.5-turbo-16k</option>
-                        <option value="gpt-4" {!! $settings['model'] == "gpt-4" ? "selected" : "" !!}>gpt-4</option>
+                        <option value="gpt-4o-mini" {!! $settings['model'] == "gpt-4o-mini" ? "selected" : "" !!}>gpt-4o-mini</option>
+                        <option value="gpt-4o-mini-2024-07-18" {!! $settings['model'] == "gpt-4o-mini-2024-07-18" ? "selected" : "" !!}>gpt-4o-mini-2024-07-18</option>
+                        <option value="gpt-3.5-turbo-0125" {!! $settings['model'] == "gpt-3.5-turbo-0125" ? "selected" : "" !!}>gpt-3.5-turbo-0125</option>
                     </select>
                 </div>
             </div>
