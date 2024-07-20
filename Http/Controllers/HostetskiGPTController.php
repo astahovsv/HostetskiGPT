@@ -78,64 +78,111 @@ class HostetskiGPTController extends Controller
     public function generate(Request $request) {
         if (Auth::user() === null) return Response::json(["error" => "Unauthorized"], 401);
         $settings = GPTSettings::findOrFail($request->get("mailbox_id"));
-        $openaiClient = \Tectalic\OpenAi\Manager::build(new \GuzzleHttp\Client(
-            [
-                'timeout' => config('app.curl_timeout'),
-                'connect_timeout' => config('app.curl_connect_timeout'),
-                'proxy' => config('app.proxy'),
-            ]
-        ), new \Tectalic\OpenAi\Authentication($settings->api_key));
 
-        $command = $request->get("command");
-        $messages = [[
-            'role' => 'system',
-            'content' => $command ?? $settings->start_message
-        ]];
+        $client = \OpenAI::factory()
+            ->withApiKey($settings->api_key)
+            ->withHttpClient(new \GuzzleHttp\Client([
+                    'timeout' => config('app.curl_timeout'),
+                    'connect_timeout' => config('app.curl_connect_timeout'),
+                    'proxy' => config('app.proxy'),
+                ]))
+            ->withHttpHeader('OpenAI-Beta', 'assistants=v2')
+            ->make();
 
-        if ($settings->client_data_enabled) {
-            $customerName = $request->get("customer_name");
-            $customerEmail = $request->get("customer_email");
-            $conversationSubject = $request->get("conversation_subject");
-            array_push($messages, [
-                'role' => 'system',
-                'content' => __('Conversation subject is ":subject", customer name is ":name", customer email is ":email"', [
-                    'subject' => $conversationSubject,
-                    'name' => $customerName,
-                    'email' => $customerEmail
-                ])
-            ]);
-        }
-
-        array_push($messages, [
+        $gptThread = $client->threads()->create([]);
+        
+        $client->threads()->messages()->create($gptThread->id, [
             'role' => 'user',
-            'content' => $request->get('query')
+            'content' => $request->get('query'),
         ]);
 
-        $response = $openaiClient->chatCompletions()->create(
-        new \Tectalic\OpenAi\Models\ChatCompletions\CreateRequest([
-            'model'  => $settings->model,
-            'messages' => $messages,
-            'max_tokens' => (integer) $settings->token_limit
-        ])
-        )->toModel();
+        $client->threads()->runs()->create(
+            threadId: $gptThread->id, 
+            parameters: [
+                'assistant_id' => 'asst_1SBgvdStUpzj9GobOmeRkixd',
+            ],
+        );
 
+        $gptMessages = $client->threads()->messages()->list($gptThread->id, [
+            'limit' => 1,
+        ]);
+
+        $gptMessage = $gptMessages->data[0];
+        $gptAnswer = $gptMessage->content->text->value;
+        
         $thread = Thread::find($request->get('thread_id'));
-        if ($thread->chatgpt === null) {
-            $answers = [];
-        } else {
-            $answers = json_decode($thread->chatgpt, true);
+        $answers = [];
+        if ($thread->chatgpt != null) {
+            // $answers = json_decode($thread->chatgpt, true);
         }
-        if ($answers === null) {
-            $answers = [];
-        }
-        array_push($answers, trim($response->choices[0]->message->content, "\n"));
+        array_push($answers, trim($gptAnswer, "\n"));
         $thread->chatgpt = json_encode($answers, JSON_UNESCAPED_UNICODE);
         $thread->save();
 
         return Response::json([
             'query' => $request->get('query'),
-            'answer' => $response->choices[0]->message->content
+            'answer' => $gptAnswer
         ], 200);
+
+
+        // $openaiClient = \Tectalic\OpenAi\Manager::build(new \GuzzleHttp\Client(
+        //     [
+        //         'timeout' => config('app.curl_timeout'),
+        //         'connect_timeout' => config('app.curl_connect_timeout'),
+        //         'proxy' => config('app.proxy'),
+        //     ]
+        // ), new \Tectalic\OpenAi\Authentication($settings->api_key));
+
+        // $command = $request->get("command");
+        // $messages = [[
+        //     'role' => 'system',
+        //     'content' => $command ?? $settings->start_message
+        // ]];
+
+        // if ($settings->client_data_enabled) {
+        //     $customerName = $request->get("customer_name");
+        //     $customerEmail = $request->get("customer_email");
+        //     $conversationSubject = $request->get("conversation_subject");
+        //     array_push($messages, [
+        //         'role' => 'system',
+        //         'content' => __('Conversation subject is ":subject", customer name is ":name", customer email is ":email"', [
+        //             'subject' => $conversationSubject,
+        //             'name' => $customerName,
+        //             'email' => $customerEmail
+        //         ])
+        //     ]);
+        // }
+
+        // array_push($messages, [
+        //     'role' => 'user',
+        //     'content' => $request->get('query')
+        // ]);
+
+        // $response = $openaiClient->chatCompletions()->create(
+        // new \Tectalic\OpenAi\Models\ChatCompletions\CreateRequest([
+        //     'model'  => $settings->model,
+        //     'messages' => $messages,
+        //     'max_tokens' => (integer) $settings->token_limit
+        // ])
+        // )->toModel();
+
+        // $thread = Thread::find($request->get('thread_id'));
+        // if ($thread->chatgpt === null) {
+        //     $answers = [];
+        // } else {
+        //     $answers = json_decode($thread->chatgpt, true);
+        // }
+        // if ($answers === null) {
+        //     $answers = [];
+        // }
+        // array_push($answers, trim($response->choices[0]->message->content, "\n"));
+        // $thread->chatgpt = json_encode($answers, JSON_UNESCAPED_UNICODE);
+        // $thread->save();
+
+        // return Response::json([
+        //     'query' => $request->get('query'),
+        //     'answer' => $response->choices[0]->message->content
+        // ], 200);
     }
 
     public function answers(Request $request) {
