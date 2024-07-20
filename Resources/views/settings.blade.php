@@ -1,8 +1,10 @@
 @extends('layouts.app')
 
-@section('title_full', 'HostetskiGPT - ' . $mailbox->name)
+@section('title_full', 'GPT Assistant - ' . $mailbox->name)
 
-@section('body_attrs')@parent data-mailbox_id="{{ $mailbox->id }}"@endsection
+@section('body_attrs') 
+    @parent data-mailbox_id="{{ $mailbox->id }}" 
+@endsection
 
 @section('sidebar')
     @include('partials/sidebar_menu_toggle')
@@ -11,7 +13,7 @@
 
 @section('content')
     <div class="section-heading">
-        HostetskiGPT
+        GPT Assistant
     </div>
     <div class="col-xs-12">
         <form class="form-horizontal margin-top margin-bottom" method="POST" action="">
@@ -102,5 +104,4 @@
 
 @section('body_bottom')
     @parent
-    
 @endsection

@@ -81,11 +81,7 @@ class HostetskiGPTController extends Controller
 
         $client = \OpenAI::factory()
             ->withApiKey($settings->api_key)
-            ->withHttpClient(new \GuzzleHttp\Client([
-                    'timeout' => config('app.curl_timeout'),
-                    'connect_timeout' => config('app.curl_connect_timeout'),
-                    'proxy' => config('app.proxy'),
-                ]))
+            ->withHttpClient(new \GuzzleHttp\Client(\Helper::setGuzzleDefaultOptions()))
             ->withHttpHeader('OpenAI-Beta', 'assistants=v2')
             ->make();
 
@@ -177,7 +173,7 @@ class HostetskiGPTController extends Controller
     }
 
     public function saveSettings($mailbox_id, Request $request) {
-        //return $request->get('model');
+
         GPTSettings::updateOrCreate(
             ['mailbox_id' => $mailbox_id],
             [
