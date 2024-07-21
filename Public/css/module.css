@@ -14,9 +14,15 @@
     border: 1px solid #ffe19d;
 }
 
-.gpt-message-toolbar-item {
+.gpt-message-toolbar-title {
     float: left; 
     margin-right: 12px;
+}
+
+.gpt-message-toggle {
+    float: left; 
+    margin-left: 6px;
+    margin-right: 6px;
 }
 
 .gpt-message-toolbar-icon {

@@ -86,12 +86,14 @@ class HostetskiGPTServiceProvider extends ServiceProvider
             ?>
             <div class="margin-bottom">
                 <div class="gpt-message-toolbar">
-                    <div class="gpt-message-toolbar-item">
+
+                    <div class="gpt-message-toolbar-title">
                         <?php echo __('GPT Answers') ?>:
                     </div>
+                    
                     <?php foreach ($messages as $index => $message): ?>
                         <?php $is_current = ($index == $current_index); ?>
-                        <div class="gpt-message-toolbar-item gpt-message-triggers">
+                        <div class="gpt-message-triggers">
                             <a 
                                 href="#" 
                                 data-thread-id="<?php echo $thread->id ?>" 
@@ -102,19 +104,19 @@ class HostetskiGPTServiceProvider extends ServiceProvider
                             </a>
                         </div>
                     <?php endforeach ?>
-                    <div class="gpt-message-toolbar-item">
-                        <img class="gpt-message-toolbar-icon gpt-message-loader hidden" src="/modules/hostetskigpt/img/loading.gif" alt="">
-                        <button class="gpt-message-run">
-                            <img class="gpt-message-toolbar-icon" src="/modules/hostetskigpt/img/ic_autorenew.png" alt="">
-                        </button>
-                    </div>
-                    <div class="gpt-message-toolbar-item">
-                        <button class="gpt-message-copy"
-                            data-thread-id="<?php echo $thread->id ?>" 
-                            data-message-index="<?php echo $index ?>" 
-                        >
-                            <img class="gpt-message-toolbar-icon" src="/modules/hostetskigpt/img/ic_content_copy.png" alt="">
-                    </div>
+                    
+                    <img class="gpt-message-toolbar-icon gpt-message-loader hidden" src="/modules/hostetskigpt/img/loading.gif" alt="">
+
+                    <button class="gpt-message-run">
+                        <img class="gpt-message-toolbar-icon" src="/modules/hostetskigpt/img/ic_autorenew.png" alt="">
+                    </button>
+                    
+                    <button class="gpt-message-copy"
+                        data-thread-id="<?php echo $thread->id ?>" 
+                        data-message-index="<?php echo $index ?>" 
+                    >
+                        <img class="gpt-message-toolbar-icon" src="/modules/hostetskigpt/img/ic_content_copy.png" alt="">
+                    </button>
                 </div>
                 <?php foreach ($messages as $index => $message): ?>
                     <div class="gpt-message-text gpt-message-<?php echo $index ?> <?php if ($index != $current_index): ?>hidden<?php endif ?>">
