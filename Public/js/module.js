@@ -4,28 +4,37 @@ $(document).ready(function() {
 		toggleGPTMessage($(this).attr('data-thread-id'), $(this).attr('data-message-index'));
 		e.preventDefault();
 	});
+    $('#conv-layout-main .gpt-message-copy').click(function(e) {
+		copyGPTMessage($(this).attr('data-thread-id'), $(this).attr('data-message-index'));
+		e.preventDefault();
+	});
 });
 
 // Togle gpt messages
 function toggleGPTMessage(thread_id, message_index) {
 
 	var trigger = $('#thread-'+thread_id+' .gpt-message-trigger-'+message_index+':first');
-	var text = $('#thread-'+thread_id+' .gpt-message-'+message_index+':first');
+	var message = $('#thread-'+thread_id+' .gpt-message-'+message_index+':first');
 
-	if (text.is(':visible')) {
+	if (message.is(':visible')) {
 		// Hide
-		text.addClass('hidden');
+		message.addClass('hidden');
 		trigger.removeClass('selected');
-		trigger.children('.caret:first').addClass('hidden');
 	} else {
 		// Show
 		$('#thread-'+thread_id+' .gpt-message-text').addClass('hidden');
-		$('#thread-'+thread_id+' .gpt-message-triggers .caret').addClass('hidden');
 		$('#thread-'+thread_id+' .gpt-message-triggers a').removeClass('selected');
-		text.removeClass('hidden');
+		message.removeClass('hidden');
 		trigger.addClass('selected');
-		trigger.children('.caret:first').removeClass('hidden');
 	}
+}
+
+// Copy gpt messages
+function copyGPTMessage(thread_id, message_index) {
+    const text = $(`#thread-${thread_id} .gpt-message-${message_index}`).innerHTML;
+    // navigator.clipboard.writeText(current_answer[0].innerHTML.replace(/<\/?.*?>/g, "").replaceAll("```", ""));
+    navigator.clipboard.writeText('Copied: ' . text);
+    showFloatingAlert('success', __("Copied to clipboard"));
 }
 
 function hostetskigptInit() {
