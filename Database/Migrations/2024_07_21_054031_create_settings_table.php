@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Migration_2024_07_21_0909 extends Migration
+class CreateSettingsTable extends Migration
 {
     /**
      * Run the migrations.
