@@ -13,8 +13,13 @@
 
 .gpt-message-toolbar-item {
     float: left; 
-    margin-left: 4px; 
-    margin-right: 4px;
+    margin-left: 5px; 
+    margin-right: 5px;
+}
+
+.gpt-message-copy {
+    background: none; 
+    border: none;
 }
 
 .gpt-loader {
