@@ -32,8 +32,7 @@ function toggleGPTMessage(thread_id, message_index) {
 // Copy gpt messages
 function copyGPTMessage(thread_id, message_index) {
     const text = $(`#thread-${thread_id} .gpt-message-${message_index}`)[0].innerHTML;
-    // navigator.clipboard.writeText(current_answer[0].innerHTML.replace(/<\/?.*?>/g, "").replaceAll("```", ""));
-    navigator.clipboard.writeText(text);
+    navigator.clipboard.writeText(text.replace(/<\/?.*?>/g, "").replaceAll("```", ""));
     showFloatingAlert('success', gptassistantData.copiedToClipboard);
 }
 
@@ -79,16 +78,41 @@ function generateAnswer(e) {
 
     $(`#thread-${thread_id} .thread-info`).prepend("<img class=\"gpt-loader\" src=\"/modules/hostetskigpt/img/loading.gif\" alt=\"Test\">");
 
-    fsAjax(`mailbox_id=${mailbox_id}&query=${query}&thread_id=${thread_id}&customer_name=${customer_name}&customer_email=${customer_email}&conversation_subject=${conversation_subject}`, '/hostetskigpt/generate', function (response) {
-        $(`#thread-${thread_id} .gpt-answer`).last().addClass("hidden");
-        addAnswer(thread_id, response.answer);
-        $(`#thread-${thread_id} .gpt-answer`).last().removeClass("hidden");
-        $(`#thread-${thread_id} .gpt-current-answer`).text($(`#thread-${thread_id} .gpt-answers div`).length);
-        $(`#thread-${thread_id} .gpt-loader`).remove();
-    }, true, function() {
-        showFloatingAlert('error', Lang.get("messages.ajax_error"));
-        $(`#thread-${thread_id} .gpt-loader`).remove();
-    });
+    fsAjax(
+        {
+            mailbox_id: mailbox_id,
+            thread_id: thread_id,
+            query: query,
+            customer_name: customer_name,
+            customer_email: customer_email,
+            conversation_subject: conversation_subject
+        },
+        '/hostetskigpt/generate',
+        function (response) {
+            window.location.href = '';
+            // $(`#thread-${thread_id} .gpt-answer`).last().addClass("hidden");
+            // addAnswer(thread_id, response.answer);
+            // $(`#thread-${thread_id} .gpt-answer`).last().removeClass("hidden");
+            // $(`#thread-${thread_id} .gpt-current-answer`).text($(`#thread-${thread_id} .gpt-answers div`).length);
+            // $(`#thread-${thread_id} .gpt-loader`).remove();
+        }, 
+        true, 
+        function() {
+            showFloatingAlert('error', Lang.get("messages.ajax_error"));
+            $(`#thread-${thread_id} .gpt-loader`).remove();
+        }
+    );
+
+    // fsAjax(`mailbox_id=${mailbox_id}&query=${query}&thread_id=${thread_id}&customer_name=${customer_name}&customer_email=${customer_email}&conversation_subject=${conversation_subject}`, '/hostetskigpt/generate', function (response) {
+    //     $(`#thread-${thread_id} .gpt-answer`).last().addClass("hidden");
+    //     addAnswer(thread_id, response.answer);
+    //     $(`#thread-${thread_id} .gpt-answer`).last().removeClass("hidden");
+    //     $(`#thread-${thread_id} .gpt-current-answer`).text($(`#thread-${thread_id} .gpt-answers div`).length);
+    //     $(`#thread-${thread_id} .gpt-loader`).remove();
+    // }, true, function() {
+    //     showFloatingAlert('error', Lang.get("messages.ajax_error"));
+    //     $(`#thread-${thread_id} .gpt-loader`).remove();
+    // });
 }
 
 function addAnswer(thread_id, text) {
