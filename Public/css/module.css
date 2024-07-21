@@ -9,6 +9,10 @@
     height: 30px; 
     width: 100%; 
     align-items: center;
+    padding: 15px;
+    background-color: #fff1cf;
+    color: #b37100;
+    border: 1px solid #ffe19d;
 }
 
 .gpt-message-toolbar-item {
@@ -25,11 +29,10 @@
 }
 
 .gpt-message-text {
-    color: #b37100;
-    border-color: #ffe19d;
-    background-color: #fff1cf;
     padding: 15px;
-    border: 1px solid transparent;
+    background-color: #fff1cf;
+    color: #b37100;
+    border: 1px solid #ffe19d;
 }
 
 .gpt-loader {
