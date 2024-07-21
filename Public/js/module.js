@@ -8,7 +8,7 @@ $(document).ready(function() {
 		copyGPTMessage($(this).attr('data-thread-id'), $(this).attr('data-message-index'));
 		e.preventDefault();
 	});
-    $('#conv-layout-main .gpt-message-run').click(function(e) {
+    $('#conv-layout-main .gpt-message-create').click(function(e) {
 		runGPTAssistant(e);
 		e.preventDefault();
 	});
@@ -34,15 +34,14 @@ function toggleGPTMessage(thread_id, message_index) {
 
 function copyGPTMessage(thread_id, message_index) {
     const text = $(`#thread-${thread_id} .gpt-message-${message_index}`)[0].innerHTML;
-    navigator.clipboard.writeText(text.replace(/<\/?.*?>/g, "").replaceAll("```", ""));
+    navigator.clipboard.writeText(text.replace(/<\/?.*?>/g, "").trim());
     showFloatingAlert('success', "Copied to clipboard");
 }
 
 function runGPTAssistant(e) {
     
-    const text = $(e.target).closest(".thread").children(".thread-message").children(".thread-body").children(".thread-content").get(0).innerHTML.replace(/<\/?.*?>/g, "").trim();
-    const query = encodeURIComponent(text);
     const thread_id = $(e.target).closest(".thread").attr("data-thread_id");
+    const text = $(`#thread-${thread_id} .thread-content`)[0].innerHTML.replace(/<\/?.*?>/g, "").trim();
     const mailbox_id = $("body").attr("data-mailbox_id");
 
     $(`#thread-${thread_id} .thread-info`).prepend("<img class=\"gpt-loader\" src=\"/modules/hostetskigpt/img/loading.gif\" alt=\"Test\">");
@@ -51,7 +50,7 @@ function runGPTAssistant(e) {
         {
             mailbox_id: mailbox_id,
             thread_id: thread_id,
-            query: query
+            query: encodeURIComponent(text)
         },
         '/hostetskigpt/generate',
         function (response) {

@@ -71,7 +71,7 @@ class HostetskiGPTServiceProvider extends ServiceProvider
                 return;
             }
             ?>
-            <li><a class="gpt-message-run" href="#" target="_blank" role="button"><?php echo __("Generate answer (GPT)")?></a></li>
+            <li><a class="gpt-message-create" href="#" target="_blank" role="button"><?php echo __("Generate answer (GPT)")?></a></li>
             <?php
         }, 100);
 
