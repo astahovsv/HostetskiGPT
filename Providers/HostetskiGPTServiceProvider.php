@@ -103,9 +103,9 @@ class HostetskiGPTServiceProvider extends ServiceProvider
                         </div>
                     <?php endforeach ?>
                     <div class="gpt-message-toolbar-item">
-                        <img class="gpt-message-loader hidden" src="/modules/hostetskigpt/img/loading.gif" alt="">
+                        <img class="gpt-message-toolbar-icon gpt-message-loader hidden" src="/modules/hostetskigpt/img/loading.gif" alt="">
                         <button class="gpt-message-run">
-                            <img src="/modules/hostetskigpt/img/ic_autorenew.png" alt="">
+                            <img class="gpt-message-toolbar-icon" src="/modules/hostetskigpt/img/ic_autorenew.png" alt="">
                         </button>
                     </div>
                     <div class="gpt-message-toolbar-item">
@@ -113,7 +113,7 @@ class HostetskiGPTServiceProvider extends ServiceProvider
                             data-thread-id="<?php echo $thread->id ?>" 
                             data-message-index="<?php echo $index ?>" 
                         >
-                            <img src="/modules/hostetskigpt/img/ic_content_copy.png" alt="">
+                            <img class="gpt-message-toolbar-icon" src="/modules/hostetskigpt/img/ic_content_copy.png" alt="">
                     </div>
                 </div>
                 <?php foreach ($messages as $index => $message): ?>
