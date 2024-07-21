@@ -89,6 +89,42 @@ class HostetskiGPTServiceProvider extends ServiceProvider
             <?php
         }, 100);
 
+        // Show answers
+        \Eventy::addAction('thread.before_body', function($thread, $loop, $threads, $conversation, $mailbox) {
+            $messages = \Helper::jsonToArray($thread->chatgpt);
+            if (!$messages) {
+                return;
+            }
+            $i = 0;
+            $current_index = count($messages) - 1;
+            ?>
+            <div class="margin-bottom">
+                <div class="small margin-bottom-10">
+                    <strong><?php echo __('GPT Messages') ?>:</strong> 
+                    <span class="gpt-message-triggers">
+                        <?php foreach ($messages as $index => $message): ?>
+                            <?php $is_current = ($index == $current_index); ?>
+                            <a 
+                                href="#" 
+                                data-thread-id="<?php echo $thread->id ?>" 
+                                data-message-index="<?php echo $index ?>" 
+                                class="ttr-toggle gpt-message-trigger-<?php echo $index ?> <?php if ($is_current): ?> selected<?php endif ?>"
+                            >
+                                <?php echo $index+1; ?>
+                                <span style="margin-left: 3px;" class="caret <?php if (!$is_current): ?>hidden<?php endif ?>"></span>
+                            </a>
+                            <?php if ($index < count($messages)-1): ?>&nbsp;|&nbsp;<?php endif ?>
+                        <?php endforeach ?>
+                    </span>
+                </div>
+                <?php foreach ($messages as $index => $message): ?>
+                    <div class="alert alert-note gpt-message-text gpt-message-<?php echo $index ?> <?php if ($index != $current_index): ?>hidden<?php endif ?>">
+                        <?php echo \Helper::nl2brDouble(htmlspecialchars($message)) ?>
+                    </div>
+                <?php endforeach ?>
+            </div>
+            <?php
+        }, 20, 5);
     }
 
     /**
