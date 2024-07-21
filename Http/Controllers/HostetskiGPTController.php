@@ -2,78 +2,15 @@
 
 namespace Modules\HostetskiGPT\Http\Controllers;
 
+use App\Thread;
+use App\Mailbox;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Thread;
-use App\Mailbox;
 use Modules\HostetskiGPT\Entities\Settings;
 
-class HostetskiGPTController extends Controller
-{
-
-    /**
-     * Display a listing of the resource.
-     * @return Response
-     */
-    public function index()
-    {
-        return view('hostetskigpt::index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     * @return Response
-     */
-    public function create()
-    {
-        return view('hostetskigpt::create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     * @param  Request $request
-     * @return Response
-     */
-    public function store(Request $request)
-    {
-    }
-
-    /**
-     * Show the specified resource.
-     * @return Response
-     */
-    public function show()
-    {
-        return view('hostetskigpt::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @return Response
-     */
-    public function edit()
-    {
-        return view('hostetskigpt::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param  Request $request
-     * @return Response
-     */
-    public function update(Request $request)
-    {
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @return Response
-     */
-    public function destroy()
-    {
-    }
+class HostetskiGPTController extends Controller {
 
     public function generate(Request $request) {
         if (Auth::user() === null) return Response::json(["error" => "Unauthorized"], 401);

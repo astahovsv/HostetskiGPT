@@ -115,5 +115,5 @@ function copyAnswer(e) {
     const thread_id = $(e.target).closest(".thread").attr("data-thread_id");
     const current_answer = $(`#thread-${thread_id} .gpt-answer`).not(".hidden");
     navigator.clipboard.writeText(current_answer[0].innerHTML.replace(/<\/?.*?>/g, "").replaceAll("```", ""));
-    showFloatingAlert('success', hostetskiGPTData.copiedToClipboard);
+    showFloatingAlert('success', gptassistantData.copiedToClipboard);
 }

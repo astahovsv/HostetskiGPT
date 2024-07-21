@@ -2,12 +2,14 @@
 
 namespace Modules\HostetskiGPT\Providers;
 
+use App\Mailbox;
+use App\Thread;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
-use App\Mailbox;
-use App\Thread;
 use Nwidart\Modules\Facades\Module;
+
+define('GPT_ASSISTANT_MODULE', 'hostetskigpt');
 
 class HostetskiGPTServiceProvider extends ServiceProvider
 {
@@ -62,17 +64,11 @@ class HostetskiGPTServiceProvider extends ServiceProvider
         \Eventy::addAction('javascript', function() {
             $version = Module::find('hostetskigpt')->get('version');
             $copiedToClipboard = __("Copied to clipboard");
-            $updateAvailable = __('Update available for module ');
-            $start_message = "";
-            $modifyPrompt = __("Complete prompt and send last response from client to GPT");
             $send = __("Send");
 
-            echo "const hostetskiGPTData = {" .
+            echo "const gptassistantData = {" .
                     "'copiedToClipboard': '{$copiedToClipboard}'," .
-                    "'updateAvailable': '{$updateAvailable}'," .
                     "'version': '{$version}'," .
-                    "'start_message': `{$start_message}`," .
-                    "'modifyPrompt': `{$modifyPrompt}`," .
                     "'send': `{$send}`," .
                 "};";
             echo 'hostetskigptInit();';
