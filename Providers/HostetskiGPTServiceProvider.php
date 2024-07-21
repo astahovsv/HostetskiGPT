@@ -85,39 +85,37 @@ class HostetskiGPTServiceProvider extends ServiceProvider
             $current_index = count($messages) - 1;
             ?>
             <div class="margin-bottom">
-                <span class="small margin-bottom-10">
-                    <strong><?php echo __('GPT Answers') ?>:</strong>
-                    &nbsp;
-                    <span class="gpt-message-triggers">
+                <div class="gpt-message-toolbar">
+                    <div class="gpt-message-toolbar-item">
+                        <?php echo __('GPT Answers') ?>:
+                    </div>
                     <?php foreach ($messages as $index => $message): ?>
                         <?php $is_current = ($index == $current_index); ?>
-                        <a 
-                            href="#" 
-                            data-thread-id="<?php echo $thread->id ?>" 
-                            data-message-index="<?php echo $index ?>" 
-                            class="gpt-message-toggle gpt-message-trigger-<?php echo $index ?> <?php if ($is_current): ?> selected<?php endif ?>"
-                        >
-                            <?php echo $index+1; ?>
-                        </a>
-                        <?php if ($index < count($messages)-1): ?>&nbsp;|&nbsp;<?php endif ?>
-                        <?php endforeach ?>
-                    </span>
-                    &nbsp;
-                    <span 
+                        <div class="gpt-message-toolbar-item gpt-message-triggers">
+                            <a 
+                                href="#" 
+                                data-thread-id="<?php echo $thread->id ?>" 
+                                data-message-index="<?php echo $index ?>" 
+                                class="gpt-message-toggle gpt-message-trigger-<?php echo $index ?> <?php if ($is_current): ?> selected<?php endif ?>"
+                            >
+                                <?php echo $index+1; ?>
+                            </a>
+                        </div>
+                    <?php endforeach ?>
+                    <div 
                         data-thread-id="<?php echo $thread->id ?>" 
                         data-message-index="<?php echo $index ?>" 
-                        class="gpt-message-copy"
+                        class="gpt-message-toolbar-item gpt-message-copy"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#000000">
                             <path d="M360-240q-29.7 0-50.85-21.15Q288-282.3 288-312v-480q0-29.7 21.15-50.85Q330.3-864 360-864h384q29.7 0 50.85 21.15Q816-821.7 816-792v480q0 29.7-21.15 50.85Q773.7-240 744-240H360Zm0-72h384v-480H360v480ZM216-96q-29.7 0-50.85-21.15Q144-138.3 144-168v-552h72v552h456v72H216Zm144-216v-480 480Z"/>
                         </svg>
-                    </span>
-                </span>
-                <br/>
-                <?php foreach ($messages as $index => $message): ?>
-                <div class="alert alert-note gpt-message-text gpt-message-<?php echo $index ?> <?php if ($index != $current_index): ?>hidden<?php endif ?>">
-                    <?php echo \Helper::nl2brDouble(htmlspecialchars($message)) ?>
+                    </div>
                 </div>
+                <?php foreach ($messages as $index => $message): ?>
+                    <div class="alert alert-note gpt-message-text gpt-message-<?php echo $index ?> <?php if ($index != $current_index): ?>hidden<?php endif ?>">
+                        <?php echo \Helper::nl2brDouble(htmlspecialchars($message)) ?>
+                    </div>
                 <?php endforeach ?>
             </div>
             <?php
