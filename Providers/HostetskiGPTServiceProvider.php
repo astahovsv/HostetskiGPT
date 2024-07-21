@@ -114,7 +114,7 @@ class HostetskiGPTServiceProvider extends ServiceProvider
                 </div>
                 <?php foreach ($messages as $index => $message): ?>
                     <div class="alert alert-note gpt-message-text gpt-message-<?php echo $index ?> <?php if ($index != $current_index): ?>hidden<?php endif ?>">
-                        <?php echo \Helper::nl2brDouble(htmlspecialchars($message)) ?>
+                        <?php echo nl2br(htmlspecialchars($message)) ?>
                     </div>
                 <?php endforeach ?>
             </div>

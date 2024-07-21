@@ -20,6 +20,8 @@
 .gpt-message-copy {
     background: none; 
     border: none;
+    padding: 0;
+    line-height: normal;
 }
 
 .gpt-loader {
