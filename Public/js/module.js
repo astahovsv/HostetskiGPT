@@ -8,9 +8,12 @@ $(document).ready(function() {
 		copyGPTMessage($(this).attr('data-thread-id'), $(this).attr('data-message-index'));
 		e.preventDefault();
 	});
+    $('#conv-layout-main .gpt-message-run').click(function(e) {
+		runGPTAssistant(e);
+		e.preventDefault();
+	});
 });
 
-// Togle gpt messages
 function toggleGPTMessage(thread_id, message_index) {
 
 	var trigger = $('#thread-'+thread_id+' .gpt-message-trigger-'+message_index+':first');
@@ -29,21 +32,13 @@ function toggleGPTMessage(thread_id, message_index) {
 	}
 }
 
-// Copy gpt messages
 function copyGPTMessage(thread_id, message_index) {
     const text = $(`#thread-${thread_id} .gpt-message-${message_index}`)[0].innerHTML;
     navigator.clipboard.writeText(text.replace(/<\/?.*?>/g, "").replaceAll("```", ""));
-    showFloatingAlert('success', gptassistantData.copiedToClipboard);
+    showFloatingAlert('success', "Copied to clipboard");
 }
 
-function hostetskigptInit() {
-	$(document).ready(function(){
-        $(document).on("click", ".chatgpt-get", generateAnswer);
-	});
-}
-
-function generateAnswer(e) {
-    e.preventDefault();
+function runGPTAssistant(e) {
     
     const text = $(e.target).closest(".thread").children(".thread-message").children(".thread-body").children(".thread-content").get(0).innerHTML.replace(/<\/?.*?>/g, "").trim();
     const query = encodeURIComponent(text);

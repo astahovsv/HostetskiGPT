@@ -60,20 +60,6 @@ class HostetskiGPTServiceProvider extends ServiceProvider
             return $show;
         }, 20 , 2);
 
-        // JavaScript in the bottom
-        \Eventy::addAction('javascript', function() {
-            $version = Module::find('hostetskigpt')->get('version');
-            $copiedToClipboard = __("Copied to clipboard");
-            $send = __("Send");
-
-            echo "const gptassistantData = {" .
-                    "'copiedToClipboard': '{$copiedToClipboard}'," .
-                    "'version': '{$version}'," .
-                    "'send': `{$send}`," .
-                "};";
-            echo 'hostetskigptInit();';
-        });
-
         \Eventy::addAction('mailboxes.settings.menu', function($mailbox) {
             if (auth()->user()->isAdmin()) {
                 echo \View::make('hostetskigpt::partials/settings_menu', ['mailbox' => $mailbox])->render();
@@ -85,7 +71,7 @@ class HostetskiGPTServiceProvider extends ServiceProvider
                 return;
             }
             ?>
-            <li><a class="chatgpt-get" href="#" target="_blank" role="button"><?php echo __("Generate answer (GPT)")?></a></li>
+            <li><a class="gpt-message-run" href="#" target="_blank" role="button"><?php echo __("Generate answer (GPT)")?></a></li>
             <?php
         }, 100);
 
