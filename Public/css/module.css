@@ -16,18 +16,6 @@
     height: 18px;
     margin-right: 4px;
 }
-.gpt-answers-data {
-    text-align: left;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.gpt-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-right: 20px;
-}
 .gpt-copy-icon {
     display: inline-flex;
     align-items: center;

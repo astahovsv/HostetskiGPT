@@ -1,5 +1,5 @@
 {
-    "name": "HostetskiGPT",
+    "name": "GPT Assistant",
     "alias": "hostetskigpt",
     "description": "Creating responses using GPT Assistant",
     "version": "1.0.6",
