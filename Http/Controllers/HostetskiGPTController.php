@@ -8,7 +8,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Thread;
 use App\Mailbox;
-use Modules\HostetskiGPT\Entities\GPTSettings;
+use Modules\HostetskiGPT\Entities\Settings;
 
 class HostetskiGPTController extends Controller
 {
@@ -77,7 +77,7 @@ class HostetskiGPTController extends Controller
 
     public function generate(Request $request) {
         if (Auth::user() === null) return Response::json(["error" => "Unauthorized"], 401);
-        $settings = GPTSettings::findOrFail($request->get("mailbox_id"));
+        $settings = Settings::findOrFail($request->get("mailbox_id"));
 
         $client = \OpenAI::factory()
             ->withApiKey($settings->api_key)
@@ -98,7 +98,7 @@ class HostetskiGPTController extends Controller
         $stream = $client->threads()->runs()->createStreamed(
             threadId: $gptThread->id,
             parameters: [
-                'assistant_id' => 'asst_1SBgvdStUpzj9GobOmeRkixd',
+                'assistant_id' => $settings->assistant_id,
             ],
         );
         foreach($stream as $response) {
@@ -154,16 +154,12 @@ class HostetskiGPTController extends Controller
     public function settings($mailbox_id) {
         $mailbox = Mailbox::findOrFail($mailbox_id);
 
-        $settings = GPTSettings::find($mailbox_id);
+        $settings = Settings::find($mailbox_id);
 
         if (empty($settings)) {
             $settings['mailbox_id'] = $mailbox_id;
             $settings['api_key'] = "";
-            $settings['token_limit'] = "";
-            $settings['start_message'] = "";
-            $settings['enabled'] = false;
-            $settings['model'] = "";
-            $settings['client_data_enabled'] = false;
+            $settings['assistant_id'] = "";
         }
 
         return view('hostetskigpt::settings', [
@@ -174,27 +170,14 @@ class HostetskiGPTController extends Controller
 
     public function saveSettings($mailbox_id, Request $request) {
 
-        GPTSettings::updateOrCreate(
+        Settings::updateOrCreate(
             ['mailbox_id' => $mailbox_id],
             [
-                'api_key' => $request->get("api_key"),
-                'enabled' => isset($_POST['gpt_enabled']),
-                'token_limit' => $request->get('token_limit'),
-                'start_message' => $request->get('start_message'),
-                'model' => $request->get('model'),
-                'client_data_enabled' => isset($_POST['show_client_data_enabled'])
+                'api_key' => $request->get('api_key'),
+                'assistant_id' => $request->get('assistant_id')
             ]
         );
 
         return redirect()->route('hostetskigpt.settings', ['mailbox_id' => $mailbox_id]);
     }
-
-    public function checkIsEnabled(Request $request) {
-        $settings = GPTSettings::find($request->query("mailbox"));
-        if (empty($settings)) {
-            return Response::json(['enabled'=> false], 200);
-        }
-        return Response::json(['enabled' => $settings['enabled']], 200);
-    }
-
 }

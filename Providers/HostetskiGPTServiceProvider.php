@@ -2,12 +2,11 @@
 
 namespace Modules\HostetskiGPT\Providers;
 
-use App\Mailbox;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
+use App\Mailbox;
 use App\Thread;
-use Modules\HostetskiGPT\Entities\GPTSettings;
 use Nwidart\Modules\Facades\Module;
 
 class HostetskiGPTServiceProvider extends ServiceProvider
@@ -64,8 +63,7 @@ class HostetskiGPTServiceProvider extends ServiceProvider
             $version = Module::find('hostetskigpt')->get('version');
             $copiedToClipboard = __("Copied to clipboard");
             $updateAvailable = __('Update available for module ');
-            $settings = $this->mailbox ? GPTSettings::find($this->mailbox->id) : null;
-            $start_message = $settings ? $settings->start_message : "";
+            $start_message = "";
             $modifyPrompt = __("Complete prompt and send last response from client to GPT");
             $send = __("Send");
 

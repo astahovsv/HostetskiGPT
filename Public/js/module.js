@@ -12,15 +12,6 @@ function hostetskigptInit() {
 	    addModifyPromptAlert();
         if (document.location.pathname.startsWith("/conversation")) {
             const mailbox_id = $("body").attr("data-mailbox_id");
-            $.ajax({
-                url: '/hostetskigpt/is_enabled?mailbox=' + mailbox_id,
-                dataType: 'json',
-                success: function (response, status) {
-                    if (!response.enabled) {
-                        $(".chatgpt-get").remove();
-                    }
-                }
-            });
 
             const conversation_id = $("body").attr("data-conversation_id");
             $.ajax({
@@ -156,19 +147,6 @@ function copyAnswer(e) {
 }
 
 async function injectGptAnswer(){
-    // const { value: command } = await Swal.fire({
-    //     input: 'textarea',
-    //     inputLabel: 'Anfrage an Chat GPT',
-    //     inputValue: hostetskiGPTData.start_message+"\n",
-    //     width: '50em',
-    //     inputAttributes: {
-    //         'aria-label': 'Type your message here'
-    //     },
-    //     showCancelButton: true
-    // })
-    // if (!command) {
-    //     return;
-    // }
     const thread = $(".thread-type-customer:first");
     const text = thread.children(".thread-message").children(".thread-body").children(".thread-content").get(0).innerHTML.replace(/<\/?.*?>/g, "").trim();
     const query = encodeURIComponent(text);
