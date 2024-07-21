@@ -31,7 +31,7 @@ function toggleGPTMessage(thread_id, message_index) {
 
 // Copy gpt messages
 function copyGPTMessage(thread_id, message_index) {
-    const text = $(`#thread-${thread_id} .gpt-message-${message_index}`).innerHTML;
+    const text = $(`#thread-${thread_id} .gpt-message-${message_index}`)[0].innerHTML;
     // navigator.clipboard.writeText(current_answer[0].innerHTML.replace(/<\/?.*?>/g, "").replaceAll("```", ""));
     navigator.clipboard.writeText(text);
     showFloatingAlert('success', gptassistantData.copiedToClipboard);
