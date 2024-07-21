@@ -2,14 +2,10 @@ function hostetskigptInit() {
 	$(document).ready(function(){
         // Add event listeners
         $(document).on("click", ".chatgpt-get", generateAnswer);
-        $(document).on("click", ".gptbutton", showModifyPromptAlert);
         $(document).on("click", ".gpt-nav-previous", previousAnswer);
         $(document).on("click", ".gpt-nav-next", nextAnswer);
         $(document).on("click", ".gpt-copy-icon", copyAnswer);
-        $(document).on("click", ".gpt-close-modal", hideModifyPromptAlert);
-        $(document).on("click", ".gpt-apply-modal", injectGptAnswer);
 
-	    addModifyPromptAlert();
         if (document.location.pathname.startsWith("/conversation")) {
             const mailbox_id = $("body").attr("data-mailbox_id");
 
@@ -25,30 +21,6 @@ function hostetskigptInit() {
                         $(`#thread-${item.thread} .gpt-answer`).last().removeClass("hidden");
                         $(`#thread-${item.thread} .gpt-current-answer`).text($(`#thread-${item.thread} .gpt-answers div`).length);
                     });
-                }
-            });
-
-            // Add button to reply form
-            $(".conv-reply-body .note-toolbar > .note-btn-group:first").append('<button class="gptbutton btn btn-default btn-sm" aria-label="GPT Antwort" data-original-title="GPT Antwort">' +
-                '<i class="glyphicon glyphicon-sunglasses"></i>' +
-                '</button>'
-            );
-        }
-
-        if (document.location.pathname === "/modules/list") {
-            $.ajax({
-                url: 'https://updates.hostetski.com/hostetskigpt/updates',
-                dataType: 'json',
-                success: function (response, status) {
-                    if (response.current_version != hostetskiGPTData.version) {
-                        $('#installed').after(`
-                            <div class="row-container margin-top">
-                                <div class="alert alert-warning">
-                                    ${hostetskiGPTData.updateAvailable} <a href="https://github.com/code-debug228/HostetskiGPT">HostetskiGPT</a>
-                                </div>
-                            </div>
-                        `)
-                    }
                 }
             });
         }
@@ -83,7 +55,7 @@ function generateAnswer(e) {
 function addAnswer(thread_id, text) {
     if (!$(`#thread-${thread_id} .gpt`).length) {
         $(`#thread-${thread_id}`).prepend(`<div class="gpt">
-            <strong>ChatGPT:</strong>
+            <strong>GPT Assistant:</strong>
             <br />
             <div class="gpt-answers-data">
                 <div class="gpt-nav">
@@ -144,72 +116,4 @@ function copyAnswer(e) {
     const current_answer = $(`#thread-${thread_id} .gpt-answer`).not(".hidden");
     navigator.clipboard.writeText(current_answer[0].innerHTML.replace(/<\/?.*?>/g, "").replaceAll("```", ""));
     showFloatingAlert('success', hostetskiGPTData.copiedToClipboard);
-}
-
-async function injectGptAnswer(){
-    const thread = $(".thread-type-customer:first");
-    const text = thread.children(".thread-message").children(".thread-body").children(".thread-content").get(0).innerHTML.replace(/<\/?.*?>/g, "").trim();
-    const query = encodeURIComponent(text);
-    const thread_id = thread.attr("data-thread_id");
-    const mailbox_id = $("body").attr("data-mailbox_id");
-    const customer_name = encodeURIComponent($(".customer-name").text());
-    const customer_email = encodeURIComponent($(".customer-email").text().trim());
-    const conversation_subject = encodeURIComponent($(".conv-subjtext span").text().trim());
-    const command = $("#gpt-modified-prompt").val();
-
-    $(".gptbutton").addClass("disabled");
-    hideModifyPromptAlert();
-
-    fsAjax(`mailbox_id=${mailbox_id}&query=${query}&command=${encodeURIComponent(command)}&thread_id=${thread_id}&customer_name=${customer_name}&customer_email=${customer_email}&conversation_subject=${conversation_subject}`, '/hostetskigpt/generate', function (response) {
-        $('#body').summernote('pasteHTML', response.answer);
-        $(".gptbutton").removeClass("disabled");
-    }, true, function() {
-        $(".gptbutton").removeClass("disabled");
-        showFloatingAlert('error', Lang.get("messages.ajax_error"));
-    });
-}
-
-function addModifyPromptAlert() {
-    $('body').append(`
-        <div class="modal fade" aria-hidden="false" tabindex="-1" style="display: none;" id="gpt-prompt-append">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close gpt-close-modal" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                        <h4 class="modal-title">${hostetskiGPTData.modifyPrompt}</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group" style="overflow:auto;">
-                            <textarea class="form-control note-form-control note-input col-md-12" id="gpt-modified-prompt"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" href="#" class="btn btn-primary note-btn note-btn-primary gpt-apply-modal">
-                            ${hostetskiGPTData.send}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `);
-    $("#gpt-modified-prompt").val(hostetskiGPTData.start_message);
-}
-
-function showModifyPromptAlert() {
-    const alert = $("#gpt-prompt-append");
-    alert[0].classList.add("in");
-    alert.css("display", "block");
-    $("body").append(`
-        <div class="modal-backdrop fade in"></div>
-    `);
-}
-
-function hideModifyPromptAlert() {
-    const alert = $("#gpt-prompt-append");
-    alert[0].classList.remove("in");
-    alert.css("display", "none");
-    $(".modal-backdrop").remove();
-    $("#gpt-modified-prompt").val(hostetskiGPTData.start_message);
 }

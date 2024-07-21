@@ -4,10 +4,6 @@
     }
 }
 
-.gptbutton.disabled i {
-    animation: rotateSpinner 800ms linear infinite;
-}
-
 .gpt {
     margin: 30px;
     padding: 10px 20px;
