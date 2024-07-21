@@ -1,6 +1,6 @@
 
 $(document).ready(function() {
-	$('#conv-layout-main .ttr-toggle').click(function(e) {
+	$('#conv-layout-main .gpt-message-toggle').click(function(e) {
 		toggleGPTMessage($(this).attr('data-thread-id'), $(this).attr('data-message-index'));
 		e.preventDefault();
 	});
@@ -84,7 +84,8 @@ function generateAnswer(e) {
 
 function addAnswer(thread_id, text) {
     if (!$(`#thread-${thread_id} .gpt`).length) {
-        $(`#thread-${thread_id}`).prepend(`<div class="gpt">
+        $(`#thread-${thread_id}`).prepend(`
+        <div class="gpt">
             <strong>GPT Assistant:</strong>
             <br />
             <div class="gpt-answers-data">
