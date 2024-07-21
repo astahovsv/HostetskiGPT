@@ -17,7 +17,15 @@
 
 .gpt-message-toolbar-item {
     float: left; 
-    margin-right: 10px;
+    margin-right: 12px;
+}
+
+.gpt-message-run {
+    background: none; 
+    border: none;
+    padding: 0;
+    line-height: normal;
+    fill: #b37100;
 }
 
 .gpt-message-copy {
@@ -33,6 +41,11 @@
     background-color: #fff1cf;
     color: #b37100;
     border: 1px solid #ffe19d;
+}
+
+.gpt-message-loader {
+    width: 20px;
+    height: 20px;
 }
 
 .gpt-loader {

@@ -1,15 +1,19 @@
 
 $(document).ready(function() {
+    $('#conv-layout-main .gpt-message-create').click(function(e) {
+		runGPTAssistant(e);
+		e.preventDefault();
+	});
 	$('#conv-layout-main .gpt-message-toggle').click(function(e) {
 		toggleGPTMessage($(this).attr('data-thread-id'), $(this).attr('data-message-index'));
 		e.preventDefault();
 	});
-    $('#conv-layout-main .gpt-message-copy').click(function(e) {
-		copyGPTMessage($(this).attr('data-thread-id'), $(this).attr('data-message-index'));
+    $('#conv-layout-main .gpt-message-run').click(function(e) {
+		runGPTAssistant(e);
 		e.preventDefault();
 	});
-    $('#conv-layout-main .gpt-message-create').click(function(e) {
-		runGPTAssistant(e);
+    $('#conv-layout-main .gpt-message-copy').click(function(e) {
+		copyGPTMessage($(this).attr('data-thread-id'), $(this).attr('data-message-index'));
 		e.preventDefault();
 	});
 });
@@ -44,6 +48,9 @@ function runGPTAssistant(e) {
     const text = $(`#thread-${thread_id} .thread-content`)[0].innerHTML.replace(/<\/?.*?>/g, "").trim();
     const mailbox_id = $("body").attr("data-mailbox_id");
 
+    $(`#thread-${thread_id} .gpt-message-run`).addClass('hidden');
+    $(`#thread-${thread_id} .gpt-message-loader`).removeClass('hidden');
+    
     $(`#thread-${thread_id} .thread-info`).prepend("<img class=\"gpt-loader\" src=\"/modules/hostetskigpt/img/loading.gif\" alt=\"Test\">");
 
     fsAjax(
@@ -59,7 +66,8 @@ function runGPTAssistant(e) {
         true, 
         function() {
             showFloatingAlert('error', Lang.get("messages.ajax_error"));
-            $(`#thread-${thread_id} .gpt-loader`).remove();
+            $(`#thread-${thread_id} .gpt-message-run`).removeClass('hidden');
+            $(`#thread-${thread_id} .gpt-message-loader`).remove('hidden');
         }
     );
 }

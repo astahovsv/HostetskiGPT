@@ -102,15 +102,24 @@ class HostetskiGPTServiceProvider extends ServiceProvider
                             </a>
                         </div>
                     <?php endforeach ?>
-                    <button 
-                        data-thread-id="<?php echo $thread->id ?>" 
-                        data-message-index="<?php echo $index ?>" 
-                        class="gpt-message-toolbar-item gpt-message-copy"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" width="20px" viewBox="0 -960 960 960">
-                            <path d="M360-240q-29.7 0-50.85-21.15Q288-282.3 288-312v-480q0-29.7 21.15-50.85Q330.3-864 360-864h384q29.7 0 50.85 21.15Q816-821.7 816-792v480q0 29.7-21.15 50.85Q773.7-240 744-240H360Zm0-72h384v-480H360v480ZM216-96q-29.7 0-50.85-21.15Q144-138.3 144-168v-552h72v552h456v72H216Zm144-216v-480 480Z"/>
-                        </svg>
-                    </button>
+                    <div class="gpt-message-toolbar-item">
+                        <img class="gpt-message-loader hidden" src="/modules/hostetskigpt/img/loading.gif" alt="">
+                        <button class="gpt-message-run">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" width="20px" viewBox="0 -960 960 960">
+                                <path d="M227-346q-16-30-25.5-63.5T192-480q0-121 85-206t209-82l-57-57 51-51 144 144-144 144-51-51 57-57q-94-2-158 62t-64 154q0 22 4 42t12 39l-53 53ZM480-84 336-228l144-144 51 51-57 57q94 2 158-62t64-154q0-22-4-42t-12-39l53-53q16 30 25.5 63.5T768-480q0 120-85 205.5T474-192l57 57-51 51Z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="gpt-message-toolbar-item">
+                        <button class="gpt-message-copy"
+                            data-thread-id="<?php echo $thread->id ?>" 
+                            data-message-index="<?php echo $index ?>" 
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" width="20px" viewBox="0 -960 960 960">
+                                <path d="M360-240q-29.7 0-50.85-21.15Q288-282.3 288-312v-480q0-29.7 21.15-50.85Q330.3-864 360-864h384q29.7 0 50.85 21.15Q816-821.7 816-792v480q0 29.7-21.15 50.85Q773.7-240 744-240H360Zm0-72h384v-480H360v480ZM216-96q-29.7 0-50.85-21.15Q144-138.3 144-168v-552h72v552h456v72H216Zm144-216v-480 480Z"/>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
                 <?php foreach ($messages as $index => $message): ?>
                     <div class="gpt-message-text gpt-message-<?php echo $index ?> <?php if ($index != $current_index): ?>hidden<?php endif ?>">
